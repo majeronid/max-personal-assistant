@@ -1,0 +1,25 @@
+name: static-pages-smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify required legal pages exist
+        run: |
+          test -s index.html
+          test -s privacy.html
+          test -s terms.html
+          test -s compliance.html
+          grep -qi "SMS consent is not" privacy.html
+          grep -qi "STOP" terms.html
+          grep -qi "A2P" compliance.html
